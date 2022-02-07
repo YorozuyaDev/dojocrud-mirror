@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateLessonsTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations for lessons.
      *
      * @return void
      */
@@ -16,6 +16,11 @@ class CreateLessonsTable extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('title');
+            $table->mediumText('content');
+            $table-> bigInteger('id_media')->unsigned()->nullable();
+            
+            $table->foreign('id_media')->references('id')->on('lessonsmedia');
         });
     }
 
