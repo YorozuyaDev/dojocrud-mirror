@@ -21,6 +21,9 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->date('birthdate');
+            $table->decimal('telefono')->unsigned()->unique();
+            $table->boolean('admin');
         });
     }
 
