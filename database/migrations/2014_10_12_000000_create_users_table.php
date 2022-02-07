@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUsersTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations for users.
      *
      * @return void
      */
@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->date('birthdate');
-            $table->decimal('telefono')->unsigned()->unique();
+            $table->decimal('phone')->unsigned()->unique();
             $table->boolean('admin');
         });
     }
