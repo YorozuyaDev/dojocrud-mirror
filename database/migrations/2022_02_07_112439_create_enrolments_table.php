@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEnrolmentsTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations for enrolments.
      *
      * @return void
      */
@@ -16,6 +16,12 @@ class CreateEnrolmentsTable extends Migration
         Schema::create('enrolments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table-> bigInteger('id_user')->unsigned()->nullable();
+            $table-> bigInteger('id_course')->unsigned()->nullable();
+            
+            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_courses')->references('id')->on('courses');
+            
         });
     }
 
