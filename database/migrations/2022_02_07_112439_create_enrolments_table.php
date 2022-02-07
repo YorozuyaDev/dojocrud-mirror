@@ -18,10 +18,9 @@ class CreateEnrolmentsTable extends Migration
             $table->timestamps();
             $table-> bigInteger('id_user')->unsigned()->nullable();
             $table-> bigInteger('id_course')->unsigned()->nullable();
-            
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_courses')->references('id')->on('courses');
             
+            $table->foreign('id_course')->references('id')->on('courses');
         });
     }
 
