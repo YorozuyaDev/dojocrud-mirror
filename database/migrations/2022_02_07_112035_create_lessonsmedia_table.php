@@ -16,6 +16,8 @@ class CreateLessonsmediaTable extends Migration
         Schema::create('lessonsmedia', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('filename');
+            $table->string('mimetype');
         });
     }
 
