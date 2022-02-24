@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Centro La Encina </title>
-
+   
     <!-- ================= Favicon ================== -->
     <!-- Standard -->
     <link rel="shortcut icon" href="http://placehold.it/64.png/000/fff">
@@ -38,17 +38,23 @@
                 <div class="nano-content">
                     <div class="logo"><a href="index.html"><!-- <img src="assets/images/logo.png" alt="" /> --><span> La Encina </span></a></div>
                     <ul>
-                        <li class="label"> Mis cursos </li>
-                        <li><a class="sidebar-sub-toggle"> Aikido <span class="badge badge-primary">2</span> <span class="sidebar-collapse-icon ti-angle-down"></span></a>
-                            <ul>
-                                <li><a href="index.html">Dashboard 1</a></li>
-                                <li><a href="index1.html">Dashboard 2</a></li>
-                            </ul>
+                        <li class="label">Mis Cursos</li>
+                      
+                        @foreach(Auth::user()->userCourses as $course_user)
+                        <li><a class="sidebar-sub-toggle"><i class="ti-home"></i>{{$course_user->name}}<span class="badge badge-primary">2</span> <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                        <li><a href="{{url('course/'.$course_user->id)}}">Inicio</a></li>
+                            <li><a href="{{route('lesson.index', ['id_course'=>$course_user->id])}}">Lecciones</a></li>
+                          </ul>
                         </li>
+                        @endforeach
+                        @if(Auth::user()->rol == 'admin' || Auth::user()->rol == 'maestro' )
                         <li class="label"> Administración </li>
-                            <li><a href="index.html">Matriculaciones</a></li>
-                            <li><a href="index1.html"></a></li>
+                            <li><a href="{{url('enrolment')}}">Matriculaciones</a></li>
+                            <li><a href="{{url('user')}}">Usuarios</a></li>
+                            <li><a href="{{url('course')}}">Cursos</a></li>
                         </li>
+                        @endif
                     </ul>
                     
                 </div>
@@ -188,14 +194,18 @@
                         </div>
                         <div class="dropdown dib">
                             <div class="header-icon" data-toggle="dropdown">
-                                <span class="user-avatar">John
+                                @if(Auth::user()->active==0)
+                                <span class="badge badge-danger"> Inactivo </span>
+                                @endif
+                                <span class="user-avatar">Hola {{{ Auth::user()->name }}}!
                                     <i class="ti-angle-down f-s-10"></i>
                                 </span>
                                 <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">
+                                    @if(Auth::user()->rol == 'admin')
                                     <div class="dropdown-content-heading">
-                                        <span class="text-left">Upgrade Now</span>
-                                        <p class="trial-day">30 Days Trail</p>
+                                        <span class="text-left">Admin</span>
                                     </div>
+                                    @endif
                                     <div class="dropdown-content-body">
                                         <ul>
                                             <li>
@@ -225,10 +235,14 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#">
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                                                     <i class="ti-power-off"></i>
                                                     <span>Logout</span>
                                                 </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                    @csrf
+                                                </form>
                                             </li>
                                         </ul>
                                     </div>
@@ -251,7 +265,7 @@
                     <div class="col-lg-8 p-r-0 title-margin-right">
                         <div class="page-header">
                             <div class="page-title">
-                                <h1>Hello, <span>Welcome Here</span></h1>
+                                
                             </div>
                         </div>
                     </div>
@@ -267,9 +281,13 @@
                         </div>
                     </div>
                     <!-- /# column -->
+                       
                 </div>
                 <!-- /# row -->
                 <div id="main-content">
+                    <div class="container">
+                                    @yield('container')
+                                </div>
                 </div>
             </div>
         </div>

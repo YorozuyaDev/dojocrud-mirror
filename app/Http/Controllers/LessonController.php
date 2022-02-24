@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LessonController extends Controller
 {
@@ -12,9 +13,16 @@ class LessonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+     
+      public function __construct(Request $request){
+       $this->middleware('RequireRole:maestro,'. $request->id_course)->except('index','show');
+    }
+    
+    public function index(Request $request)
     {
-        //
+        $data['lessons'] = lesson::all();
+        $data['id_course'] =  $request->id_course;
+        return view('lessons.index', $data);
     }
 
     /**
@@ -22,10 +30,12 @@ class LessonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
-    }
+        
+        $data['id_course'] =  $request->id_course;
+        return view('lessons.create',$data);
+    }   
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +45,27 @@ class LessonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data['id_course'] = $request->id;
+        $lesson = new lesson($request->all());
+        $lesson->id_course = $request->id_course;
+        $lesson->grade = $request->grade;
+        if($request->hasFile('postmedia')){
+            $file = $request->file('postmedia');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs('public/images/postmedia', $filename);
+              //  $mimetype = $request->file->getMimeType();
+            $lesson->filepath = $path;
+            $lesson->mimetype = $file->getMimeType();
+        }
+        try {
+            $lesson->save();     
+            $data['success'] = true;
+            $data['message'] = 'se ha publicado correctamente';
+        } catch(\Exception $e ) {
+            $data['message'] = 'error al publicar' . $e;
+            return back()->withInput()->with($data);
+        }
+        return redirect('course/'.$request->id)->with($data); 
     }
 
     /**
@@ -46,7 +76,10 @@ class LessonController extends Controller
      */
     public function show(lesson $lesson)
     {
-        //
+        $data['lessonmedia'] = url(Storage::url($lesson->filepath));
+        $data['lesson'] = $lesson;
+        return view('lessons.show', $data);
+
     }
 
     /**

@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\lessonmedia;
+use App\Models\lesson;
+
+use DB;
 
 use App\Models\lessonsmedia;
 use Illuminate\Http\Request;
@@ -14,7 +18,7 @@ class LessonsmediaController extends Controller
      */
     public function index()
     {
-        //
+        return view('lessonsmedia.index'); 
     }
 
     /**
@@ -22,9 +26,18 @@ class LessonsmediaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(Request $request) {
+        
+        $lessonmedia = new lessonsmedia ($request-> all());
+        $data = [];
+        try{
+            $lessonmedia->save();
+            $data['message'] = 'Post publicado';
+        }catch(\Exception $e) {
+            $data['message'] = 'Error al publicar el post' . $e;
+            return back()->withInput()->with($data);
+        }
+        return redirect('puestos', $data);
     }
 
     /**

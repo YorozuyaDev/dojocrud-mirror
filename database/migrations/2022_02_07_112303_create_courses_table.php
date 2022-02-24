@@ -17,7 +17,7 @@ class CreateCoursesTable extends Migration
             $table-> id();
             $table-> timestamps();
             $table-> string('name',20);
-            $table-> decimal('pricing', $scale=2);
+            $table-> decimal('pricing');
             $table-> bigInteger('id_user')->unsigned()->nullable();
             
             $table->foreign('id_user')->references('id')->on('users');

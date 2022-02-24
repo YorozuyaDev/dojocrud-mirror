@@ -18,9 +18,11 @@ class CreateLessonsTable extends Migration
             $table->timestamps();
             $table->string('title');
             $table->mediumText('content');
-            $table-> bigInteger('id_media')->unsigned()->nullable();
-            
-            $table->foreign('id_media')->references('id')->on('lessonsmedia');
+            $table->string('filepath');
+            $table->string('mimetype');
+            $table->string('grade');
+            $table-> bigInteger('id_course')->unsigned()->nullable();
+            $table->foreign('id_course')->references('id')->on('courses');
         });
     }
 

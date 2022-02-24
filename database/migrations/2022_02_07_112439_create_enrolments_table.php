@@ -16,6 +16,7 @@ class CreateEnrolmentsTable extends Migration
         Schema::create('enrolments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->tinyInteger('grade')->default(1);
             $table-> bigInteger('id_user')->unsigned()->nullable();
             $table-> bigInteger('id_course')->unsigned()->nullable();
             $table->foreign('id_user')->references('id')->on('users');
